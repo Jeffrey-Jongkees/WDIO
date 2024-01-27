@@ -20,12 +20,10 @@ export const config = {
     // The path of the spec files will be resolved relative from the directory of
     // of the config file unless it's absolute.
     //
-    specs: ['./test/**/*.js'],
+    specs: ['./test/**/fileDownload.js'],
     
     // Patterns to exclude.
-    exclude: [
-        // 'path/to/excluded/files'
-    ],
+    exclude: ['./test/**/dragAndDrop.js'],
     //
     // ============
     // Capabilities
@@ -121,7 +119,10 @@ export const config = {
     //
     // Test reporter for stdout.
     // The only one supported by default is 'dot'
-    // see also: https://webdriver.io/docs/dot-reporter
+    // see also: https://webdriver.io/docs/dot-reporter  
+    
+    //$ npx allure generate --clean allure-results
+    //npx allure open
     reporters: ['spec',
     ['allure', {
         outputDir: 'allure-results',
