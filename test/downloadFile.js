@@ -1,21 +1,25 @@
-import testData from '../'
-
 import axios from 'axios';
-import fs from 'fs';
+import fs from 'fs-extra';
 import path from 'path';
 
+let jsonData = '';
+
 export async function downloadFile() {
-    // Destructure the variables from the test data
-    const { attributeSelector, attribute, nameDirectory, nameDocument, website } = testData.fileDownload;
+    
+    jsonData = await fs.readJson("./testdata.json");
 
     // Navigate to the page 
-    await browser.url(website);
+    //This step can be commented/removed when this function is implemented a different testscript
+    await browser.url(jsonData.fileDownload.website);
 
-    // Extract the download URL using WebdriverIO's methods
-    const downloadUrl = await browser.getAttribute(attributeSelector, attribute);
+    // Selector
+    const element = await browser.$(jsonData.fileDownload.attributeSelector);
+
+    // Attribute of the selector
+    const downloadUrl = await element.getAttribute(jsonData.fileDownload.attribute);
 
     // Define the path for the downloads folder
-    const downloadsFolderPath = path.resolve(process.cwd(), nameDirectory);
+    const downloadsFolderPath = path.resolve(process.cwd(), jsonData.fileDownload.nameFolder);
 
     // Ensure the downloads folder exists
     if (!fs.existsSync(downloadsFolderPath)) {
@@ -23,7 +27,7 @@ export async function downloadFile() {
     }
 
     // Define the full path for saving the file
-    const downloadPath = path.join(downloadsFolderPath, nameDocument);
+    const downloadPath = path.join(downloadsFolderPath, jsonData.fileDownload.nameDocument);
 
     // Download the file using axios
     const response = await axios({ method: 'GET', url: downloadUrl, responseType: 'stream' });

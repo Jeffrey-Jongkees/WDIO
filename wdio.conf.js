@@ -23,7 +23,7 @@ export const config = {
     specs: ['./test/**/fileDownload.js'],
     
     // Patterns to exclude.
-    exclude: ['./test/**/dragAndDrop.js'],
+    // exclude: ['./test/**/dragAndDrop.js'],
     //
     // ============
     // Capabilities
@@ -124,11 +124,11 @@ export const config = {
     //$ npx allure generate --clean allure-results
     //npx allure open
     reporters: ['spec',
-    ['allure', {
-        outputDir: 'allure-results',
-        disableWebdriverStepsReporting: false,
-        disableWebdriverScreenshotsReporting: false,
-    }]
+    // ['allure', {
+    //     outputDir: 'allure-results',
+    //     disableWebdriverStepsReporting: false,
+    //     disableWebdriverScreenshotsReporting: false,
+    // }]
 ],
 
     // Options to be passed to Mocha.

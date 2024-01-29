@@ -1,9 +1,9 @@
 {
     "fileDownload": {
         "website": "https://www.ah.nl/privacy",
-        "attributeSelector": "href*='privacybeleid-clean.pdf'",
+        "attributeSelector": "[href*='privacybeleid-clean.pdf']",
         "attribute": "href",
-        "nameDirectory": "downloads",
+        "nameFolder": "downloads",
         "nameDocument": "privacy_policy.pdf"
     }
 }
