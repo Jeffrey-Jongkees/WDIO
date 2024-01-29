@@ -57,7 +57,7 @@ export const config = {
     // Define all options that are relevant for the WebdriverIO instance here
     //
     // Level of logging verbosity: trace | debug | info | warn | error | silent
-    logLevel: 'info',
+    logLevel: 'debug',
     //
     // Set specific log levels per logger
     // loggers:
@@ -124,11 +124,11 @@ export const config = {
     //$ npx allure generate --clean allure-results
     //npx allure open
     reporters: ['spec',
-    // ['allure', {
-    //     outputDir: 'allure-results',
-    //     disableWebdriverStepsReporting: false,
-    //     disableWebdriverScreenshotsReporting: false,
-    // }]
+    ['allure', {
+        outputDir: 'allure-results',
+        disableWebdriverStepsReporting: true,
+        disableWebdriverScreenshotsReporting: true,
+    }]
 ],
 
     // Options to be passed to Mocha.
