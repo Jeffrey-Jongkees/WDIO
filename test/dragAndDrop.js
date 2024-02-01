@@ -26,7 +26,7 @@ describe('Drag and Drop', () => {
         //Mouse over
         await ($("//button[text()='Hover Over Me First!']")).moveTo();
         await browser.pause(2000);
-        const firstLink = await $('//div[@class="dropdown hoverrr"]//a');///rr
+        const firstLink = await $('//div[@class="dropdown hover"]//a');
         await firstLink.waitForClickable();
         await firstLink.click();
         await browser.pause(2000);
@@ -77,7 +77,7 @@ describe('Drag and Drop', () => {
         expect(alertText).toEqual('Press a button!');
 
         await browser.acceptAlert();//uses the positive route. Pressing OK for this instance
-        await expect($('[id="confirm-alert-text"]')).toHaveText('You pressed OK!555');//555
+        await expect($('[id="confirm-alert-text"]')).toHaveText('You pressed OK!');
         await browser.pause(2000);
 
         await $('[id="button4"]').click();
