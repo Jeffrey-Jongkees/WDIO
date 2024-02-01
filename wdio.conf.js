@@ -1,3 +1,6 @@
+import fs from 'fs-extra'
+import { exec } from 'child_process';
+// import allure from 'allure-commandline'
 export const config = {
     //
     // ====================
@@ -20,7 +23,7 @@ export const config = {
     // The path of the spec files will be resolved relative from the directory of
     // of the config file unless it's absolute.
     //
-    specs: ['./test/**/fileDownload.js'],
+    specs: ['./test/**/*.js'],
     
     // Patterns to exclude.
     // exclude: ['./test/**/dragAndDrop.js'],
@@ -130,11 +133,14 @@ export const config = {
     //npx allure open
     reporters: ['spec',
     ['allure', {
-        outputDir: 'allure-results',
-        disableWebdriverStepsReporting: true,
-        disableWebdriverScreenshotsReporting: true,
-        disableMochaHooks: true,
-    }]
+        //allure generate allure-results && allure open  -> generates and opens the allure report
+        //allure generate --clean allure-results && allure open  -> empties the report folder prior generating a new one
+        //npx allure open -> opens the report when automatically generating the report is enabled in the onComplete() hook
+        outputDir: './allure-results', 
+        disableWebdriverStepsReporting: false,
+        disableWebdriverScreenshotsReporting: false,
+        disableMochaHooks: true
+    }],
 ],
 
     // Options to be passed to Mocha.
@@ -158,8 +164,8 @@ export const config = {
      * @param {Array.<Object>} capabilities list of capabilities details
      */
     onPrepare: function (config, capabilities) {
-        if(fs.existsSync("./reporting/allure-results")) {
-            fs.rmSync("./reporting/allure-results", {recursive: true} );
+        if(fs.existsSync("./allure-results")) {
+            fs.rmSync("./allure-results", {recursive: true} );
         }
       },
     /**
@@ -241,8 +247,12 @@ export const config = {
      * @param {boolean} result.passed    true if test has passed, otherwise false
      * @param {object}  result.retries   information about spec related retries, e.g. `{ attempts: 0, limit: 0 }`
      */
-    // afterTest: function(test, context, { error, result, duration, passed, retries }) {
-    // },
+    afterTest: async function (test, context, { error, result, duration, passed, retries }) {
+        if (error) { // If the test didn't pass, take a screenshot.
+           await browser.takeScreenshot();
+        }
+    },
+    
 
 
     /**
@@ -267,11 +277,16 @@ export const config = {
      * @param {Array.<Object>} capabilities list of capabilities details
      * @param {Array.<String>} specs List of spec file paths that ran
      */
-    after: async function (error) {
-        if (error) {
-          await browser.takeElementScreenshot();
-        }
-      },
+    after: function(test) {
+      exec('allure serve allure-results', (error, stdout, stderr) => {
+          if (error) {
+              console.error(`Error: ${error.message}`);
+              return;
+          }
+          console.log(`stdout: ${stdout}`);
+          console.error(`stderr: ${stderr}`);
+      });
+  },
     /**
      * Gets executed right after terminating the webdriver session.
      * @param {object} config wdio configuration object
@@ -288,24 +303,24 @@ export const config = {
      * @param {Array.<Object>} capabilities list of capabilities details
      * @param {<Object>} results object containing test results
      */
-    onComplete: function () {
-        const reportError = new Error("Could not generate Allure report");
-        const generation = allure(["generate", "allure-results", "--clean"]);
-        return new Promise((resolve, reject) => {
-          const generationTimeout = setTimeout(() => reject(reportError), 60000);
+    // onComplete: function () {
+    //     const reportError = new Error("Could not generate Allure report");
+    //     const generation = allure(["generate", "allure-results", "--clean"]);
+    //     return new Promise((resolve, reject) => {
+    //       const generationTimeout = setTimeout(() => reject(reportError), 60000);
     
-          generation.on("exit", function (exitCode) {
-            clearTimeout(generationTimeout);
+    //       generation.on("exit", function (exitCode) {
+    //         clearTimeout(generationTimeout);
     
-            if (exitCode !== 0) {
-              return reject(reportError);
-            }
+    //         if (exitCode !== 0) {
+    //           return reject(reportError);
+    //         }
     
-            console.log("Allure report successfully generated");
-            resolve();
-          });
-        });
-      },
+    //         console.log("Allure report successfully generated");
+    //         resolve();
+    //       });
+    //     });
+    //   },
     /**
     * Gets executed when a refresh happens.
     * @param {string} oldSessionId session ID of the old session

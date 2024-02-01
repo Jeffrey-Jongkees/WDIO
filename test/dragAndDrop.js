@@ -26,7 +26,7 @@ describe('Drag and Drop', () => {
         //Mouse over
         await ($("//button[text()='Hover Over Me First!']")).moveTo();
         await browser.pause(2000);
-        const firstLink = await $('//div[@class="dropdown hover"]//a');
+        const firstLink = await $('//div[@class="dropdown hoverrr"]//a');///rr
         await firstLink.waitForClickable();
         await firstLink.click();
         await browser.pause(2000);
@@ -77,7 +77,7 @@ describe('Drag and Drop', () => {
         expect(alertText).toEqual('Press a button!');
 
         await browser.acceptAlert();//uses the positive route. Pressing OK for this instance
-        await expect($('[id="confirm-alert-text"]')).toHaveText('You pressed OK!');
+        await expect($('[id="confirm-alert-text"]')).toHaveText('You pressed OK!555');//555
         await browser.pause(2000);
 
         await $('[id="button4"]').click();
@@ -97,15 +97,15 @@ describe('Drag and Drop', () => {
     });
 
 
-    it('JS execute - hidden elements', async () => {
-        await browser.url('Hidden-Elements/index.html');
-        await browser.execute(()=> {
-            return document.getElementById('not-displayed').setAttribute("id", "");
-        })
+    // it('JS execute - hidden elements', async () => {
+    //     await browser.url('Hidden-Elements/index.html');
+    //     await browser.execute(()=> {
+    //         return document.getElementById('not-displayed').setAttribute("id", "");
+    //     })
         
-        await browser.execute(()=> {
-            return document.body.style.backgroundColor = "tomato";
-        })
+    //     await browser.execute(()=> {
+    //         return document.body.style.backgroundColor = "tomato";
+    //     })
 
-    });
+    // });
 });

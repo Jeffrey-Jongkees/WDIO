@@ -10,7 +10,7 @@ export async function downloadFile() {
 
     // Navigate to the page 
     //This step can be commented/removed when this function is implemented a different testscript
-    await browser.url(jsonData.fileDownload.website);
+    //await browser.url(jsonData.fileDownload.website);
 
     // Selector
     const element = await browser.$(jsonData.fileDownload.attributeSelector);
